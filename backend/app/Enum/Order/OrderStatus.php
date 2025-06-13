@@ -2,8 +2,9 @@
 
 namespace App\Enum\Order;
 
-enum OrderStatus {
-    case Pending;
-    case Started;
-    case Finished;
+enum OrderStatus: string
+{
+    case Pending = 'pending';
+    case Started = 'started';
+    case Finished = 'finished';
 }
