@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Data\DataInterface;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class EloquentRepository
@@ -13,9 +14,9 @@ abstract class EloquentRepository
         $this->model = $model;
     }
 
-    public function create(array $data): Model
+    public function create(DataInterface $data): Model
     {
         return $this->model
-            ->create($data);
+            ->create($data->toArray());
     }
 }
