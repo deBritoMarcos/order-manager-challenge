@@ -4,14 +4,21 @@ namespace App\Repository;
 
 use App\Data\DataInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 abstract class EloquentRepository
 {
-    private Model $model;
+    protected Model $model;
 
     public function __construct(Model $model)
     {
         $this->model = $model;
+    }
+
+    public function all(): Collection
+    {
+        return $this->model
+            ->all();
     }
 
     public function create(DataInterface $data): Model

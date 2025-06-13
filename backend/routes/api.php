@@ -6,6 +6,6 @@ use App\Http\Controllers\Api;
 
 Route::post('/webhook/order', Api\Webhook\Order\Store::class);
 
-// Route::prefix('orders')->name('orders.')->group(function () {
-//     Route::get('/', [Index::class]);
-// });
+Route::prefix('orders')->name('orders.')->group(function () {
+    Route::get('/', Api\Order\Index::class)->name('index');
+});

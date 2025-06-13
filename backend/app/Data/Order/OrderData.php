@@ -14,14 +14,4 @@ class OrderData extends Data implements DataInterface
         public OrderStatus $status,
     ) {
     }
-
-    public static function fromWebhook(Request $request): OrderData
-    {
-        $fields = $request->validated();
-    
-        return new self(
-            $fields['orderCode'],
-            OrderStatus::Pending,
-        );
-    }
 }
