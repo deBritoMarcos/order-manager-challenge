@@ -24,8 +24,29 @@ class ControlOrderProgressService implements ControlOrderProgressServiceInterfac
         return $this->orderRepository->create($orderData);
     }
 
-    // public function updateOrder(Order $order): Order 
-    // {
+    public function update(Order $order): Order 
+    {
+        if ($order->status === OrderStatus::Finished) {
+            return $order;
+        }
 
-    // }
+        return match ($order->status) {
+            OrderStatus::Pending => $this->updateSituation($order, OrderStatus::Started),
+            OrderStatus::Started => $this->updateSituation($order, OrderStatus::Finished),
+            default => $this->invalidSituation($order),
+        };
+    }
+
+    private function updateSituation(Order $order, OrderStatus $nextStatus): Order 
+    {
+        $this->orderRepository
+            ->updateSituation($order->id, $nextStatus);
+
+        return $order->fresh();
+    }
+
+    private function invalidSituation(Order $order): Order 
+    {
+        return $order;
+    }
 }

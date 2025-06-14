@@ -21,6 +21,12 @@ abstract class EloquentRepository
             ->all();
     }
 
+    public function find(string $id): ?Model
+    {
+        return $this->model
+            ->find($id);
+    }
+
     public function create(DataInterface $data): Model
     {
         return $this->model
