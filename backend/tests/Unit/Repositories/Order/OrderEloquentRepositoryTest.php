@@ -32,3 +32,15 @@ test('`getByFilter` creates order with expected data', function () {
             ->code->toBe($expectedOrder->code)
             ->status->toBe($expectedOrder->status);
 });
+
+test('`updateSituation` updates to expected status', function () {
+    $order = Order::factory()->create([
+        'status' => OrderStatus::Pending
+    ]);
+
+    $this->repository
+        ->updateSituation($order->id, OrderStatus::Started);
+    
+    expect($order->fresh())
+        ->status->toBe(OrderStatus::Started);
+});

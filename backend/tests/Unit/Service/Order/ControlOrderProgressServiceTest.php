@@ -39,3 +39,65 @@ test('`register` creates order with pending status', function () {
         ->code->toBe(123456)
         ->status->toBe(OrderStatus::Pending);
 });
+
+test('`update` does nothing when order is finished', function () {
+    $order = Order::factory()->create([
+        'status' => OrderStatus::Finished
+    ]);
+
+    $this->mock(OrderEloquentRepositoryInterface::class)
+        ->shouldNotReceive('updateSituation')
+        ->getMock();
+    
+    $service = app()->make(ControlOrderProgressServiceInterface::class);
+
+    $orderUpdated = $service
+        ->update($order);
+
+    expect($orderUpdated)
+        ->toBe($order);
+});
+
+test('`update` must update order to started when it is pending', function () {
+    $order = Order::factory()->create([
+        'status' => OrderStatus::Pending
+    ]);
+    
+    $id = $order->id;
+    $status = OrderStatus::Started;
+    $this->mock(OrderEloquentRepositoryInterface::class)
+        ->shouldReceive('updateSituation')
+        ->once()
+        ->withArgs(function ($expectedOrderId, $expectedStatus) use ($id, $status) {
+            return $expectedOrderId == $id
+                && $expectedStatus->value == $status->value;
+        })
+        ->andReturnTrue()
+        ->getMock();
+    
+    $service = app()->make(ControlOrderProgressServiceInterface::class);
+
+    $service->update($order);
+});
+
+test('`update` must update order to finished when it is started', function () {
+    $order = Order::factory()->create([
+        'status' => OrderStatus::Started
+    ]);
+    
+    $id = $order->id;
+    $status = OrderStatus::Finished;
+    $this->mock(OrderEloquentRepositoryInterface::class)
+        ->shouldReceive('updateSituation')
+        ->once()
+        ->withArgs(function ($expectedOrderId, $expectedStatus) use ($id, $status) {
+            return $expectedOrderId == $id
+                && $expectedStatus->value == $status->value;
+        })
+        ->andReturnTrue()
+        ->getMock();
+    
+    $service = app()->make(ControlOrderProgressServiceInterface::class);
+
+    $service->update($order);
+});

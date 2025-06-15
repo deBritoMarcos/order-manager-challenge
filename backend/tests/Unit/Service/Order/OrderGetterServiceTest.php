@@ -5,6 +5,7 @@ use App\Enum\Order\OrderStatus;
 use App\Models\Order;
 use App\Repository\Order\Contracts\OrderEloquentRepositoryInterface;
 use App\Service\Order\Contracts\OrderGetterServiceInterface;
+use Illuminate\Support\Str;
 
 it('must have a contract', function () {
     expect(app()->bound(OrderGetterServiceInterface::class))
@@ -59,4 +60,47 @@ test('`getFiltering` returns all when do not have filter params', function () {
     $service = app()->make(OrderGetterServiceInterface::class);
 
     $service->getFiltering(null, null);
+});
+
+test('`getOne` returns null when the id is invalid', function () {
+    $this->mock(OrderEloquentRepositoryInterface::class)
+        ->shouldNotReceive('find')
+        ->getMock();
+
+    $service = app()->make(OrderGetterServiceInterface::class);
+
+    expect($service->getOne('id'))
+        ->toBeNull();
+});
+
+test('`getOne` returns null when not found the order', function () {
+    $id = (string) Str::uuid();
+
+    $this->mock(OrderEloquentRepositoryInterface::class)
+        ->shouldReceive('find')
+        ->once()
+        ->withArgs([$id])
+        ->andReturn(null)
+        ->getMock();
+
+    $service = app()->make(OrderGetterServiceInterface::class);
+
+    expect($service->getOne($id))
+        ->toBeNull();
+});
+
+test('`getOne` returns expected order', function () {
+    $order = Order::factory()->create();
+
+    $this->mock(OrderEloquentRepositoryInterface::class)
+        ->shouldReceive('find')
+        ->once()
+        ->withArgs([$order->id])
+        ->andReturn($order)
+        ->getMock();
+
+    $service = app()->make(OrderGetterServiceInterface::class);
+
+    expect($service->getOne($order->id))
+        ->toBe($order);
 });
