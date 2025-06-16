@@ -24,47 +24,85 @@ function Index() {
 
     return (
         <div>
-            <h1>Orders:</h1>
+            <h1 className='title-page'>Orders:</h1>
 
-            <div>
-                <form onSubmit={handleSearchSubmit}>
-                    <label>
+            <div className="row">
+                <form onSubmit={handleSearchSubmit} className="col s12 search-form">
+                    <div className="input-field col s4 offset-s1">
                         <input 
                             type="number" 
                             name="code" 
                             placeholder='Enter the order code'
+                            maxLength="6"
                             onChange={(e) => setCodeQuery(e.target.value)}
                         />
-                    </label>
-
-                    <label>
-                        <select 
-                            name="status"
-                            onChange={(e) => setStatusQuery(e.target.value)}
-                        >
-                            <option value="pending">Pending</option>
-                            <option value="started">Started</option>
-                            <option value="finished">Finished</option>
-                        </select>
-                    </label>
-
-                    <button>Pesquisar</button>
+                    </div>
+                    <div className="input-field col s4">
+                        
+                            <select  
+                                className='browser-default'
+                                name="status"
+                                onChange={(e) => setStatusQuery(e.target.value)}
+                            >
+                                <option value="" disabled selected>Choose an status</option>
+                                <option value="pending">Pending</option>
+                                <option value="started">Started</option>
+                                <option value="finished">Finished</option>
+                            </select>
+                    </div>
+                    <div className="input-field col s2">
+                        <button className="btn waves-effect waves-light btn-large" title='search'>
+                            <i class="material-icons">search</i>
+                        </button>
+                    </div>       
                 </form>
             </div>
 
-            <ul>
-                {(orders && !loading) ? orders.map((order) => (
-                    <li key={order.id}>
-                        <p>Order {order.code}</p>
-                        <p>{order.status}</p>
-                        <Link to={`/details/${order.id}`}>Details</Link>
-                    </li>
-                )) : (
-                    <li>
-                        <p>Loading Orders</p>
-                    </li>
-                )}
-            </ul>
+            <table className='highlight centered order-list'>
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {(orders && !loading) ? orders.map((order) => (
+                        <tr>
+                            <td>{order.code}</td>
+                            <td>{order.status}</td>
+                            <td>
+                                <Link to={`/details/${order.id}`} className='waves-effect waves-light btn-small'>
+                                    Details
+                                </Link>
+                            </td>
+                        </tr>
+                    )) : (
+                        <tr>
+                            <td colSpan={3}>
+                                <div className='row'>
+                                    <div className='col sm-1 offset-s5'>
+                                        <div className='loader'>
+                                            <div className="preloader-wrapper active">
+                                                <div className="spinner-layer spinner-red-only">
+                                                    <div className="circle-clipper left">
+                                                        <div className="circle"></div>
+                                                    </div><div className="gap-patch">
+                                                        <div className="circle"></div>
+                                                    </div><div className="circle-clipper right">
+                                                        <div className="circle"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
         </div>
     )
 }
