@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useOrders } from '../../hooks/Order/useOrders'
+import { Link } from 'react-router-dom';
 
 function Index() {
     const { orders, loading, error, fetchOrders } = useOrders();
@@ -56,16 +57,13 @@ function Index() {
                     <li key={order.id}>
                         <p>Order {order.code}</p>
                         <p>{order.status}</p>
-                        
-                        {/* <Link>Details</Link> */}
-                        {/*<Link to={`/order/${order.id}`}>Details</Link> */}
+                        <Link to={`/details/${order.id}`}>Details</Link>
                     </li>
                 )) : (
                     <li>
                         <p>Loading Orders</p>
                     </li>
                 )}
-                
             </ul>
         </div>
     )
