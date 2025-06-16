@@ -12,10 +12,14 @@ function Detail() {
     const updateOrderSituation = async (order) => {
         setLockButton(true);
 
-        let url = `http://127.0.0.1:8000/api/orders/${order.id}/situation`;
+        let url = `${import.meta.env.VITE_BASE_URL}/api/orders/${order.id}/situation`;
 
         await fetch(url, {method: 'PUT'})
-            .then((response) => response.json())
+            .then((response) => {
+                if (response.ok) {
+                    fetchOrder();
+                }
+            })
             .catch(error => {
                 setError(error)
             })
@@ -52,29 +56,39 @@ function Detail() {
                                             </div>
                                         </div>
                                         
-                                        <p>Situation: {order.status} - Creation date: {order.created_at}</p>
+                                        <p>
+                                            <b>Situation</b>: {order.status} 
+                                        </p>
+                                        <p>
+                                            <b>Creation date</b>: {order.created_at}</p>
                                     </div>
                                     <div class="card-action">
                                         {order.status == 'pending' && (
                                             <button 
                                                 type='button'
-                                                className='waves-effect waves-teal btn-flat'
+                                                className='btn waves-effect waves-light blue'
                                                 disabled={lockButton}
                                                 onClick={() => updateOrderSituation(order)} 
-                                            >Start</button>
+                                            >
+                                                <i class="material-icons left">assignment</i>
+                                                Start
+                                            </button>
                                         )}
 
                                         {order.status == 'started' && (
                                             <button 
                                                 type='button'
-                                                className='waves-effect waves-teal btn-flat'
+                                                className='btn waves-effect waves-light green'
                                                 disabled={lockButton}
                                                 onClick={() => updateOrderSituation(order)}
-                                            >Finish</button>
+                                            >
+                                                <i class="material-icons left">done</i>
+                                                Finish
+                                            </button>
                                         )}
 
                                         {order.status == 'finished' && (
-                                            <button disabled className='btn-flat disabled'>Finished</button>
+                                            <button disabled className='btn-flat disabled'>No Actions</button>
                                         )}
                                     </div>
                                 </>

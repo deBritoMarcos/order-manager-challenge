@@ -8,7 +8,7 @@ export const useOrders = () => {
     const fetchOrders = async (code = null, status = null) => {
         setLoading(true);
 
-        let url = 'http://127.0.0.1:8000/api/orders';
+        let url = import.meta.env.VITE_BASE_URL + '/api/orders';
 
         if (code || status) {
             url = makeQueryRoute(url, code, status);

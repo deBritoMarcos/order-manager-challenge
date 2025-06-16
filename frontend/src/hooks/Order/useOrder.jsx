@@ -8,7 +8,7 @@ export const useOrder = (id) => {
     const fetchOrder = async () => {
         setLoading(true);
 
-        let url = 'http://127.0.0.1:8000/api/orders/' + id;
+        let url = import.meta.env.VITE_BASE_URL + '/api/orders/' + id;
 
         await fetch(url)
             .then((response) => response.json())
