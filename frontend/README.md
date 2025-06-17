@@ -1,12 +1,48 @@
-# React + Vite
+# Frontend – Vite + React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+O frontend utiliza Vite e React, com algumas dependências como Materialize CSS e React Router.
 
-Currently, two official plugins are available:
+## Pré-requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Node.js](https://nodejs.org/) (recomenda-se versão 18+)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
 
-## Expanding the ESLint configuration
+## Instalação
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. **Instale as dependências**
+
+```bash
+npm install
+# ou
+yarn
+```
+
+2. **Copie o arquivo de ambiente**
+
+```bash
+cp .env.example .env
+```
+
+3. **Execute o servidor de desenvolvimento**
+
+```bash
+npm run dev
+# ou
+yarn dev
+```
+
+O frontend estará disponível, por padrão, em: [http://localhost:5173](http://localhost:5173)
+
+## Scripts disponíveis
+
+- `dev`: Inicia o servidor de desenvolvimento
+- `build`: Gera a build de produção
+- `preview`: Visualiza a build de produção localmente
+- `lint`: Executa o ESLint
+
+## rotas
+
+- Listagem das orders: página reponsável pela listagem das orders, disponível em: `\`.
+- Detalhes da order: página responsável por apresentar os detalhes do pedido, disponível em: `\order\:id`.
+- Página não encontrada: disponível em: `\404`.
+- Página de cheats: página responsável por apresentar cheats de testes da aplicação, disponível em: `\cheats`.
