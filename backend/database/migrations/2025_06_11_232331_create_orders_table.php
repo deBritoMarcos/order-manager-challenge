@@ -12,7 +12,13 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->integer('code');
             $table->enum('status', ['pending', 'started', 'finished'])->default('pending');
+            $table->mediumText('description')->nullable();
+            $table->foreignUuid('responsable_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('responsable_id')
+                ->references('id')
+                ->on('users');
         });
     }
 
