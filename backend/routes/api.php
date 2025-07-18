@@ -13,8 +13,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::get('/', Api\Order\Index::class)->name('index');
+        
         Route::get('/{id}', Api\Order\Show::class)->name('show');
         
-        Route::put('/{id}/situation', Api\Order\Situation\Update::class)->name('update.situation');
+        Route::put('/situation', Api\Order\Situation\Update::class)->name('update.situation');
     });
 });

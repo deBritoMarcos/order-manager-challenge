@@ -13,7 +13,7 @@ class OrderFactory extends Factory
             'code' => random_int(000000, 999999),
             'status' => OrderStatus::Pending,
             'description' => null,
-            'user_id' => null,
+            'responsable_id' => null,
         ];
     }
 }

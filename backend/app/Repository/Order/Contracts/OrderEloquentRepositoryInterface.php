@@ -9,6 +9,4 @@ use Illuminate\Support\Collection;
 interface OrderEloquentRepositoryInterface
 {
     public function getByFilter(OrderFilterData $orderFilterData): Collection;
-
-    public function updateSituation(string $id, OrderStatus $newStatus): bool;
 }

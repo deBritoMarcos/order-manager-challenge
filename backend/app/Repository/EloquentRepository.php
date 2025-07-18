@@ -32,4 +32,11 @@ abstract class EloquentRepository
         return $this->model
             ->create($data->toArray());
     }
+
+    public function update(Model $model, DataInterface $data): bool
+    {
+        return $this->model
+            ->where('id', $model->id)
+            ->update($data->toArray());
+    }
 }

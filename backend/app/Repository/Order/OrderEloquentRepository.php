@@ -25,13 +25,4 @@ class OrderEloquentRepository extends EloquentRepository implements OrderEloquen
             })
             ->get();
     }
-
-    public function updateSituation(string $id, OrderStatus $newStatus): bool
-    {
-        return $this->model
-            ->where('id', $id)
-            ->update([
-                'status' => $newStatus
-            ]);
-    }
 }
