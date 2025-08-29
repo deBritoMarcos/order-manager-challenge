@@ -8,44 +8,52 @@ Este backend utiliza Laravel 12, rodando em containers Docker com Laravel Sail.
 
 ## Instalação
 
-1. **Copie o arquivo de ambiente**
+- **Copie o arquivo de ambiente**
 
 ```bash
 cp .env.example .env
 ```
 
-2. **Suba os containers com Sail**
+- **Instale as dependencias do projeto**
 
-Se já tiver o Composer instalado localmente, você pode instalar as dependências e rodar o Sail:
-
-```bash
-composer install
-./vendor/bin/sail up -d
-```
-
-Se não tiver o Composer, use o Sail diretamente:
+Se não tiver o Composer instalado em seu computador, use o seguinte comando:
 
 ```bash
 docker run --rm \
     -u "$(id -u):$(id -g)" \
-    -v $(pwd):/var/www/html \
-    -w /var/www/html \
-    laravelsail/php82-composer:latest \
+    -v $(pwd):/app \
+    -w /app \
     composer install
+```
 
+Se já tiver o Composer instalado localmente, rode o comando:
+
+```bash
+composer install
+```
+
+- **Crie os containers e levante a aplicação**
+
+```bash
 ./vendor/bin/sail up -d
 ```
 
-4. **Gere a chave da aplicação**
+- **Gere a chave da aplicação**
 
 ```bash
 ./vendor/bin/sail artisan key:generate
 ```
 
-5. **Execute as migrations**
+- **Execute as migrations**
 
 ```bash
 ./vendor/bin/sail artisan migrate
+```
+
+- **Popule o banco de dados**
+
+```bash
+./vendor/bin/sail artisan db:seed
 ```
 
 ## Acesso
@@ -56,38 +64,9 @@ Execute o comando para deixar o servidor disponível:
 ./vendor/bin/sail artisan serve
 ```
 
-- A API estará disponível em: [http://localhost:3000](http://localhost:3000) (ou porta configurada no `docker-compose.yml`)
+- A API estará disponível em: [http://localhost:80](http://localhost:80) (ou a porta configurada no `docker-compose.yml`)
 
 ## Comandos úteis
 
 - Parar containers: `./vendor/bin/sail down`
 - Rodar os testes: `./vendor/bin/sail test`
-
-## Rotas
-
-### Webhook
-
-- **POST /api/webhook/order**  
-  Recebe notificações externas para criação de pedidos.  
-  
-  **Payload exemplo:**
-  ```json
-  {
-    "state": "create",
-    "orderCode": 123456,
-  }
-  ```
-
-### Pedidos
-
-- **GET /api/orders**  
-  Lista todos os pedidos.
-
-- **GET /api/orders?code=123456&status=pending**  
-  Lista os pedidos com base nos parametros code e status, ambos são opcionais.
-
-- **GET /api/orders/{id}**  
-  Detalha um pedido específico pelo seu ID.
-
-- **PUT /api/orders/{id}/situation**  
-  Atualiza a situação (status) de um pedido.
