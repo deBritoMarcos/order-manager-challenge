@@ -1,0 +1,141 @@
+openapi: 3.0.3
+info:
+  title: Order Manager Challenge API
+  description: API documentation for the Order Manager Challenge (Laravel backend)
+  version: 1.0.0
+
+servers:
+  - url: http://localhost/api
+
+paths:
+  /webhook/order:
+    post:
+      summary: Recebe webhook de novo pedido
+      description: Recebe e processa um novo pedido via webhook.
+      tags:
+        - Webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Pedido processado com sucesso
+
+  /login:
+    post:
+      summary: Login do usuário
+      description: Realiza login do usuário e retorna token de autenticação.
+      tags:
+        - Autenticação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: secret
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Login realizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '401':
+          description: Credenciais inválidas
+
+  /logout:
+    post:
+      summary: Logout do usuário
+      description: Realiza logout do usuário autenticado.
+      tags:
+        - Autenticação
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout realizado com sucesso
+
+  /orders:
+    get:
+      summary: Listar pedidos
+      description: Retorna uma lista de pedidos cadastrados.
+      tags:
+        - Pedidos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de pedidos retornada com sucesso
+
+  /orders/{id}:
+    get:
+      summary: Consultar pedido
+      description: Retorna os dados de um pedido pelo ID.
+      tags:
+        - Pedidos
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID do pedido
+      responses:
+        '200':
+          description: Dados do pedido retornados com sucesso
+        '404':
+          description: Pedido não encontrado
+
+  /orders/situation:
+    put:
+      summary: Atualizar situação de pedidos
+      description: Atualiza a situação de um ou mais pedidos.
+      tags:
+        - Pedidos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_ids:
+                  type: array
+                  items:
+                    type: string
+                situation:
+                  type: string
+              required:
+                - order_ids
+                - situation
+      responses:
+        '200':
+          description: Situação dos pedidos atualizada com sucesso
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
